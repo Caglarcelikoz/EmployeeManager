@@ -24,7 +24,7 @@ const EmployeeList = () => {
     setShowAlert(true)
     setTimeout(() => {
       setShowAlert(false)
-     }, 2000);
+     }, 3000);
   }
 
   const handleClose = () => setShow(false);
