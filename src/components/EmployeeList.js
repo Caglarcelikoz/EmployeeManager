@@ -3,14 +3,22 @@ import Employee from "./Employee";
 import { Button, Modal,Alert } from "react-bootstrap";
 import { EmployeeContext } from "../context/EmployeeContext";
 import AddForm from "./AddForm";
+import Pagination from "./Pagination"
 
 const EmployeeList = () => {
-  const { employees } = useContext(EmployeeContext);
+  const { sortedEmployees } = useContext(EmployeeContext);
   const { removeEmployee } = useContext(EmployeeContext);
 
   const [show, setShow] = useState(false);
   const [showAlert,setShowAlert] = useState(false);
 
+  const [currentPage, setCurrentPage] = useState(1);
+    const [employeesPerPage] = useState(2)
+  
+    const indexOfLastEmployee = currentPage * employeesPerPage;
+    const indexOfFirstEmployee = indexOfLastEmployee - employeesPerPage;
+    const currentEmployees = sortedEmployees.slice(indexOfFirstEmployee, indexOfLastEmployee);
+    const totalPagesNum = Math.ceil(sortedEmployees.length /employeesPerPage)
 
   const handleAlert = async () => {
     setShowAlert(true)
@@ -25,7 +33,7 @@ const EmployeeList = () => {
   useEffect(() => {
     handleClose();
     return () => handleAlert()
-  }, [employees]);
+  }, [sortedEmployees]);
 
 
   return (
@@ -66,15 +74,18 @@ const EmployeeList = () => {
           </tr>
         </thead>
         <tbody>
-          {employees.length > 0 ?
-             employees.sort((a,b) => a.name.localeCompare(b.name)).map((employee) => (
+          {sortedEmployees.length > 0 ?
+          
+             currentEmployees.map((employee) => (
                 <tr key={employee.id}>
-                    <Employee employee={employee} removeEmployee={removeEmployee} /*handleAlert={handleAlert}*/ />
+                    <Employee employee={employee} removeEmployee={removeEmployee} />
                 </tr> 
              )) : ( <p>No employees to show</p> )
           }
         </tbody>
       </table>
+
+      <Pagination pages={totalPagesNum} setCurrentPage={setCurrentPage} />
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header className="modal-header" closeButton>
