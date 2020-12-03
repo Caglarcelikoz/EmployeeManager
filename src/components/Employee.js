@@ -1,5 +1,5 @@
 import {useState, useEffect} from 'react';
-import { Button, Modal } from "react-bootstrap";
+import { Button, Modal, OverlayTrigger, Tooltip } from "react-bootstrap";
 import EditForm from './EditForm'
 
 const Employee = ({ employee, removeEmployee, handleAlert }) => {
@@ -19,28 +19,41 @@ const Employee = ({ employee, removeEmployee, handleAlert }) => {
           <td>{employee.address}</td>
           <td>{employee.phone}</td>
           <td>
-          <button
+            <OverlayTrigger
+              overlay={
+                <Tooltip id={`tooltip-top`}>
+                    Edit
+                </Tooltip>
+              }>
+              <button
               className="btn text-warning btn-act"
               data-toggle="modal"
               onClick={handleShow}
             >
-              <i className="material-icons" data-toggle="tooltip" title="Edit">
+              <i className="material-icons">
                 &#xE254;
               </i>
             </button>
-            <button
+            </OverlayTrigger>
+            <OverlayTrigger
+              overlay={
+                <Tooltip id={`tooltip-top`}>
+                    Delete
+                </Tooltip>
+              }>
+              <button
               className="btn text-danger btn-act"
               data-toggle="modal"
             >
               <i
                 className="material-icons"
-                data-toggle="tooltip"
-                title="Delete"
                 onClick={() => removeEmployee(employee.id)}
               >
                 &#xE872;
               </i>
             </button>
+              </OverlayTrigger>
+          
           </td>
           <Modal show={show} onHide={handleClose}>
         <Modal.Header className="modal-header" closeButton>
